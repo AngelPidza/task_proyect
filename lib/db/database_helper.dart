@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/task.dart';
+import 'dart:developer' as developer;
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
@@ -65,5 +66,38 @@ class DatabaseHelper {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+  //PRUEBAS:
+  // Método para debuggear la base de datos
+  Future<void> debugDatabase() async {
+    final db = await database;
+
+    // Obtener todas las tablas
+    final tables = await db
+        .query('sqlite_master', where: 'type = ?', whereArgs: ['table']);
+
+    developer.log('Tablas en la base de datos:');
+    for (var table in tables) {
+      developer.log('Tabla: ${table['name']}');
+
+      if (table['name'] != 'android_metadata' &&
+          table['name'] != 'sqlite_sequence') {
+        final rows = await db.query(table['name'].toString());
+        developer.log('Número de registros: ${rows.length}');
+
+        for (var row in rows) {
+          developer.log('Registro: $row');
+        }
+      }
+    }
+  }
+
+  // Método para obtener la ruta de la base de datos
+  Future<String> getDatabasePath() async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, 'tasks.db');
+    developer.log('Ruta de la base de datos: $path');
+    return path;
   }
 }
