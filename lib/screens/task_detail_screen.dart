@@ -233,6 +233,8 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
                     child: TextFormField(
                       controller: _titleController,
                       enabled: _isEditing,
+                      maxLines:
+                          null, // Permite que el título ocupe varias líneas si es necesario
                       decoration: InputDecoration(
                         labelText: 'Título',
                         border: OutlineInputBorder(
@@ -243,11 +245,15 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
                         fillColor: Colors.white,
                         prefixIcon: const Icon(Icons.title, color: Colors.blue),
                       ),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 24),
 
-                  // Descripción
+                  const SizedBox(height: 24),
+// Descripción
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -264,7 +270,7 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
                     child: TextFormField(
                       controller: _descriptionController,
                       enabled: _isEditing,
-                      maxLines: 3,
+                      maxLines: null, // Limita a 3 líneas
                       decoration: InputDecoration(
                         labelText: 'Descripción',
                         border: OutlineInputBorder(
@@ -276,8 +282,13 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
                         prefixIcon:
                             const Icon(Icons.description, color: Colors.blue),
                       ),
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
+                      // Estilo que agrega puntos suspensivos si el texto es demasiado largo
                     ),
                   ),
+
                   const SizedBox(height: 24),
 
                   // Fecha

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:task/screens/task_detail_screen.dart';
 import '../models/task.dart';
-import '../screens/task_detail_screen.dart';
 
 class TaskItem extends StatelessWidget {
   final Task task;
