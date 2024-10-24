@@ -56,6 +56,10 @@ class TaskItem extends StatelessWidget {
                             ? TextDecoration.lineThrough
                             : null,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap:
+                          false, // Evita que el texto se ajuste a múltiples líneas
                     ),
                   ),
                   IconButton(

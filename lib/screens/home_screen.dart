@@ -17,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Task> _tasks = [];
   bool _isLoading = true;
   String _selectedFilter = 'all'; // 'all', 'pending', 'completed'
+  bool _isFabExtended = true; // Para controlar el estado de la animación
 
   @override
   void initState() {
@@ -30,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _tasks = tasks;
       _isLoading = false;
+      _isFabExtended = false;
     });
     // Imprimimos el número de tareas para verificar
     print('Número de tareas cargadas: ${tasks.length}');
@@ -86,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              centerTitle: true, // Centra el título
+              centerTitle: true,
               title: const Text('Mis Tareas',
                   style: TextStyle(color: Colors.white)),
               background: Container(
@@ -213,16 +215,40 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const AddTaskScreen()),
-          );
-          _loadTasks(); // Recargar la lista después de agregar una tarea
-        },
-        icon: const Icon(Icons.add),
-        label: const Text('Nueva Tarea'),
+      floatingActionButton: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: _isFabExtended
+            ? FloatingActionButton.extended(
+                key: const ValueKey('extended'),
+                onPressed: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AddTaskScreen()),
+                  );
+                  setState(() {
+                    _isFabExtended = !_isFabExtended;
+                  });
+                  _loadTasks();
+                },
+                icon: const Icon(Icons.add, color: Colors.white),
+                label: const Text(
+                  'Nueva Tarea',
+                  style: TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.indigoAccent,
+                heroTag: 'fab_extended', // Hero tag único
+              )
+            : FloatingActionButton(
+                key: const ValueKey('icon'),
+                onPressed: () {
+                  setState(() {
+                    _isFabExtended = !_isFabExtended;
+                  });
+                },
+                child: const Icon(Icons.add, color: Colors.white),
+                backgroundColor: Colors.indigoAccent,
+                heroTag: 'fab_icon', // Hero tag único
+              ),
       ),
     );
   }
